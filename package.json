@@ -1,0 +1,23 @@
+{
+  "name": "node-oidc-provider-examples",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": "^6.9.2"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "express-urlrewrite": "^1.2.0",
+    "ioredis": "^2.4.3",
+    "lodash": "^4.17.3",
+    "oidc-provider": "^1.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-import": "^2.2.0"
+  }
+}
