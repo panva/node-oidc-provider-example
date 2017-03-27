@@ -15,24 +15,20 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   // enable some of the feature, see the oidc-provider readme for more
   features: {
     claimsParameter: true,
-    clientCredentials: true,
     discovery: true,
     encryption: true,
     introspection: true,
     registration: true,
     request: true,
-    requestUri: true,
     revocation: true,
     sessionManagement: true,
   },
 });
 
 const keystore = require('./keystore.json');
-const integrity = require('./integrity.json');
 
 oidc.initialize({
   keystore,
-  integrity,
   clients: [{ client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb'] }],
 }).then(() => {
   oidc.app.proxy = true;

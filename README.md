@@ -5,7 +5,7 @@ instance on Heroku.
 
 Prerequisites
 
-- node lts/boron or newer
+- node 8.0.0 or newer
 - heroku cli installed (`which heroku`)
 - heroku cli authenticated (`heroku whoami`)
 - wget

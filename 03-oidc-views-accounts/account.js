@@ -27,13 +27,13 @@ class Account {
     });
   }
 
-  static findById(id) {
+  static async findById(ctx, id) {
     // this is usually a db lookup, so let's just wrap the thing in a promise, oidc-provider expects
     // one
-    return Promise.resolve(new Account(id));
+    return new Account(id);
   }
 
-  static authenticate(email, password) {
+  static async authenticate(email, password) {
     assert(password, 'password must be provided');
     assert(email, 'email must be provided');
     const lowercased = String(email).toLowerCase();
@@ -41,7 +41,7 @@ class Account {
     assert(id, 'invalid credentials provided');
 
     // this is usually a db lookup, so let's just wrap the thing in a promise
-    return Promise.resolve(new this(id));
+    return new this(id);
   }
 }
 

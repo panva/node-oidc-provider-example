@@ -38,12 +38,9 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   // setting a nested route is just good practice so that users
   // don't run into weird issues with multiple interactions open
   // at a time.
-  interactionUrl() {
-    // this => oidc koa request context;
-    return `/interaction/${this.oidc.uuid}`;
+  interactionUrl(ctx) {
+    return `/interaction/${ctx.oidc.uuid}`;
   },
-  // configure Provider to use the adapter
-  adapter: RedisAdapter,
   features: {
     // disable the packaged interactions
     devInteractions: false,
@@ -62,11 +59,9 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
 });
 
 const keystore = require('./keystore.json');
-const integrity = require('./integrity.json');
 
 oidc.initialize({
   keystore,
-  integrity,
   clients: [
     // reconfigured the foo client for the purpose of showing the adapter working
     {
@@ -77,6 +72,8 @@ oidc.initialize({
       token_endpoint_auth_method: 'none',
     },
   ],
+  // configure Provider to use the adapter
+  adapter: RedisAdapter,
 }).then(() => {
   oidc.app.proxy = true;
   oidc.app.keys = process.env.SECURE_KEY.split(',');
@@ -122,7 +119,7 @@ oidc.initialize({
           ts: Math.floor(Date.now() / 1000),
         },
         consent: {
-          // TODO: remove offline_access from scopes is remember is not checked
+          // TODO: remove offline_access from scopes if remember is not checked
         },
       });
     }).catch(next);
