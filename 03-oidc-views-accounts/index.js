@@ -7,7 +7,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Provider = require('oidc-provider');
 
-assert(process.env.HEROKU_APP_NAME, 'process.env.HEROKU_APP_NAME missing, run `heroku labs:enable runtime-dyno-metadata`');
+// since dyno metadata is no longer available, we infer the app name from heroku remote we set
+// manually. This is not specific to oidc-provider, just an easy way of getting up and running
+if (!process.env.HEROKU_APP_NAME && process.env.X_HEROKU_REMOTE) {
+  process.env.X_HEROKU_REMOTE.match(/\.com\/(.+)\.git/);
+  process.env.HEROKU_APP_NAME = RegExp.$1;
+}
+
+assert(process.env.HEROKU_APP_NAME, 'process.env.HEROKU_APP_NAME missing');
 assert(process.env.PORT, 'process.env.PORT missing');
 assert(process.env.SECURE_KEY, 'process.env.SECURE_KEY missing, run `heroku addons:create securekey`');
 assert.equal(process.env.SECURE_KEY.split(',').length, 2, 'process.env.SECURE_KEY format invalid');

@@ -13,9 +13,9 @@ cd my-provider
 heroku create --addons securekey,heroku-redis:hobby-dev
 ```
 
-3) Enable runtime-dyno-metadata  
+3) Enable (unavailable) runtime-dyno-metadata workaround  
 ```
-heroku labs:enable runtime-dyno-metadata
+heroku config:set X_HEROKU_REMOTE=`git remote get-url heroku`
 ```
 
 4) Copy the minimal setup  
