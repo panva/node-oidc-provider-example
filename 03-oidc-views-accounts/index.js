@@ -93,21 +93,22 @@ oidc.initialize({
 
   const parse = bodyParser.urlencoded({ extended: false });
 
-  expressApp.get('/interaction/:grant', (req, res) => {
-    const details = oidc.interactionDetails(req);
-    console.log('see what else is available to you for interaction views', details);
+  expressApp.get('/interaction/:grant', async (req, res) => {
+    oidc.interactionDetails(req).then((details) => {
+      console.log('see what else is available to you for interaction views', details);
 
-    const view = (() => {
-      switch (details.interaction.reason) {
-        case 'consent_prompt':
-        case 'client_not_authorized':
+      const view = (() => {
+        switch (details.interaction.reason) {
+          case 'consent_prompt':
+          case 'client_not_authorized':
           return 'interaction';
-        default:
+          default:
           return 'login';
-      }
-    })();
+        }
+      })();
 
-    res.render(view, { details });
+      res.render(view, { details });
+    })
   });
 
   expressApp.post('/interaction/:grant/confirm', parse, (req, res) => {
