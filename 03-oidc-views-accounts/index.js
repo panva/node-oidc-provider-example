@@ -108,7 +108,7 @@ oidc.initialize({
       })();
 
       res.render(view, { details });
-    })
+    });
   });
 
   expressApp.post('/interaction/:grant/confirm', parse, (req, res) => {
