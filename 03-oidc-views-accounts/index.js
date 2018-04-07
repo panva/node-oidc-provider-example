@@ -119,7 +119,7 @@ oidc.initialize({
 
   expressApp.post('/interaction/:grant/login', parse, (req, res, next) => {
     Account.authenticate(req.body.email, req.body.password).then((account) => {
-      oidc.interactionFinished(req, res, {
+      return oidc.interactionFinished(req, res, {
         login: {
           account: account.accountId,
           acr: '1',
