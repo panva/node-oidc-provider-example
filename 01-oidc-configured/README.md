@@ -34,3 +34,5 @@ heroku open '/.well-known/openid-configuration' # to see your new openid-configu
 ```
 
 Next up [02-oidc-adapter](../02-oidc-adapter/README.md)
+
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider#oidc-provider)
