@@ -27,3 +27,5 @@ It is possible to run a completely standalone app for interactions and it's also
 oidc-provider on AWS Lambda.
 
 Adapters that have been seen include MongoDB, PostgreSQL, redis, DynamoDB, REST Api
+
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider#oidc-provider)

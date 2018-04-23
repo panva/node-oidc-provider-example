@@ -45,3 +45,5 @@ Request will be resolved and you will be redirected to lvh.me (your localhost) w
 in the query.
 
 Next up [01-oidc-configured](../01-oidc-configured/README.md)
+
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider#oidc-provider)

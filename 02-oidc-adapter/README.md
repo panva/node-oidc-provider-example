@@ -38,3 +38,5 @@ heroku open /me?access_token=ENTER_TOKEN_HERE
 ```
 
 Next up [03-oidc-views-accounts](../03-oidc-views-accounts/README.md)
+
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider#oidc-provider)

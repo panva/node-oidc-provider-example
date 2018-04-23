@@ -34,3 +34,5 @@ heroku open '/auth?client_id=foo&response_type=id_token+token&scope=openid+email
   path specific cookie which is signed (in the example) so it cannot be fiddled with. oidc-provider
   expects that you resolve all interactions in this one go, if you fail or purposefully omit one
   the resumed authentication will fail with a corresponding error.
+
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider#oidc-provider)
