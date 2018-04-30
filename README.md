@@ -10,7 +10,6 @@ Prerequisites
 - heroku cli authenticated (`heroku whoami`)
 - wget
 - git
-- yarn
 
 
 Start [here](00-oidc-minimal).

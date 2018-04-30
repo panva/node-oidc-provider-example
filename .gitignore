@@ -25,6 +25,7 @@ build/Release
 
 # Dependency directory and lockfiles
 node_modules
+yarn.lock
 npm-shrinkwrap.json
 
 # Optional npm cache directory
