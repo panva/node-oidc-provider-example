@@ -30,8 +30,8 @@ heroku open '/auth?client_id=foo&response_type=id_token+token&scope=openid+email
 
 5) You may now proceed to plug in your real user/account model, expand the views with password resets,
   registrations, social signup, as long as your routes are in the same namespace you have access
-  to the original authentication request parameters and interaction details, those are stored in a
-  path specific cookie which is signed (in the example) so it cannot be fiddled with. oidc-provider
+  to the original authentication request parameters and interaction details, those are referenced by a
+  path specific cookie and stored using your backend adapter. oidc-provider
   expects that you resolve all interactions in this one go, if you fail or purposefully omit one
   the resumed authentication will fail with a corresponding error.
 
