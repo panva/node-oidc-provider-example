@@ -1,6 +1,5 @@
-'use strict';
-
 // see previous example for the things that are not commented
+
 const assert = require('assert');
 const path = require('path');
 const express = require('express');
@@ -82,8 +81,8 @@ oidc.initialize({
   // configure Provider to use the adapter
   adapter: RedisAdapter,
 }).then(() => {
-  oidc.app.proxy = true;
-  oidc.app.keys = process.env.SECURE_KEY.split(',');
+  oidc.proxy = true;
+  oidc.keys = process.env.SECURE_KEY.split(',');
 }).then(() => {
   // let's work with express here, below is just the interaction definition
   const expressApp = express();
@@ -101,9 +100,9 @@ oidc.initialize({
         switch (details.interaction.reason) {
           case 'consent_prompt':
           case 'client_not_authorized':
-          return 'interaction';
+            return 'interaction';
           default:
-          return 'login';
+            return 'login';
         }
       })();
 
@@ -118,8 +117,8 @@ oidc.initialize({
   });
 
   expressApp.post('/interaction/:grant/login', parse, (req, res, next) => {
-    Account.authenticate(req.body.email, req.body.password).then((account) => {
-      return oidc.interactionFinished(req, res, {
+    Account.authenticate(req.body.email, req.body.password)
+      .then(account => oidc.interactionFinished(req, res, {
         login: {
           account: account.accountId,
           acr: '1',
@@ -129,8 +128,7 @@ oidc.initialize({
         consent: {
           // TODO: remove offline_access from scopes if remember is not checked
         },
-      });
-    }).catch(next);
+      })).catch(next);
   });
 
   // leave the rest of the requests to be handled by oidc-provider, there's a catch all 404 there

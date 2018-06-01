@@ -1,5 +1,3 @@
-'use strict';
-
 // see previous example for the things that are not commented
 
 const assert = require('assert');
@@ -38,7 +36,7 @@ oidc.initialize({
   keystore,
   clients: [{ client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb'] }],
 }).then(() => {
-  oidc.app.proxy = true;
-  oidc.app.keys = process.env.SECURE_KEY.split(',');
-  oidc.app.listen(process.env.PORT);
+  oidc.proxy = true;
+  oidc.keys = process.env.SECURE_KEY.split(',');
+  oidc.listen(process.env.PORT);
 });

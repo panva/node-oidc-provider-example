@@ -1,9 +1,3 @@
 {
-  "extends": "airbnb-base",
-  "rules": {
-    "no-empty": ["error", { "allowEmptyCatch": true }],
-    "prefer-rest-params": "off",
-    "prefer-spread": "off",
-    "strict": "off"
-  }
+  "extends": "airbnb-base"
 }

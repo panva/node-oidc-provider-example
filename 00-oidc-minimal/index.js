@@ -1,5 +1,3 @@
-'use strict';
-
 const assert = require('assert');
 const Provider = require('oidc-provider');
 
@@ -25,11 +23,11 @@ oidc.initialize({
   clients: [{ client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb'] }],
 }).then(() => {
   // Heroku has a proxy in front that terminates ssl, you should trust the proxy.
-  oidc.app.proxy = true;
+  oidc.proxy = true;
 
   // set the cookie signing keys (securekey plugin is taking care of those)
-  oidc.app.keys = process.env.SECURE_KEY.split(',');
+  oidc.keys = process.env.SECURE_KEY.split(',');
 
   // listen on the heroku generated port
-  oidc.app.listen(process.env.PORT);
+  oidc.listen(process.env.PORT);
 });
