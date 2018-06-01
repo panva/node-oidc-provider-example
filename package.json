@@ -1,6 +1,6 @@
 {
   "name": "node-oidc-provider-examples",
-  "version": "2.0.0",
+  "version": "4.0.1",
   "main": "index.js",
   "engines": {
     "node": ">=8.0.0"
