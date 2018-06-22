@@ -47,12 +47,16 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
   },
+  formats: {
+    default: 'opaque',
+    AccessToken: 'jwt',
+  },
   features: {
     // disable the packaged interactions
     devInteractions: false,
 
     claimsParameter: true,
-    clientCredentials: true,
+    conformIdTokenClaims: true,
     discovery: true,
     encryption: true,
     introspection: true,

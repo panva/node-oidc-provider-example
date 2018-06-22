@@ -20,10 +20,13 @@ assert(process.env.REDIS_URL, 'process.env.REDIS_URL missing, run `heroku-redis:
 const RedisAdapter = require('./redis_adapter');
 
 const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`, {
-
+  formats: {
+    default: 'opaque',
+    AccessToken: 'jwt',
+  },
   features: {
     claimsParameter: true,
-    clientCredentials: true,
+    conformIdTokenClaims: true,
     discovery: true,
     encryption: true,
     introspection: true,
