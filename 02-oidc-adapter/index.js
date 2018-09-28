@@ -21,18 +21,15 @@ const RedisAdapter = require('./redis_adapter');
 
 const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`, {
   formats: {
-    default: 'opaque',
     AccessToken: 'jwt',
   },
   features: {
     claimsParameter: true,
-    conformIdTokenClaims: true,
     discovery: true,
     encryption: true,
     introspection: true,
     registration: true,
     request: true,
-    requestUri: true,
     revocation: true,
     sessionManagement: true,
   },

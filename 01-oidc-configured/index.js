@@ -18,12 +18,10 @@ assert.equal(process.env.SECURE_KEY.split(',').length, 2, 'process.env.SECURE_KE
 const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`, {
   // enable some of the feature, see the oidc-provider readme for more
   formats: {
-    default: 'opaque',
     AccessToken: 'jwt',
   },
   features: {
     claimsParameter: true,
-    conformIdTokenClaims: true,
     discovery: true,
     encryption: true,
     introspection: true,

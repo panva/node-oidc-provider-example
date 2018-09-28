@@ -48,7 +48,6 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
     return `/interaction/${ctx.oidc.uuid}`;
   },
   formats: {
-    default: 'opaque',
     AccessToken: 'jwt',
   },
   features: {
@@ -56,13 +55,11 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
     devInteractions: false,
 
     claimsParameter: true,
-    conformIdTokenClaims: true,
     discovery: true,
     encryption: true,
     introspection: true,
     registration: true,
     request: true,
-    requestUri: true,
     revocation: true,
     sessionManagement: true,
   },
@@ -116,7 +113,9 @@ oidc.initialize({
 
   expressApp.post('/interaction/:grant/confirm', parse, (req, res) => {
     oidc.interactionFinished(req, res, {
-      consent: {},
+      consent: {
+        // TODO: add offline_access checkbox to confirm too
+      },
     });
   });
 
@@ -125,12 +124,11 @@ oidc.initialize({
       .then(account => oidc.interactionFinished(req, res, {
         login: {
           account: account.accountId,
-          acr: '1',
           remember: !!req.body.remember,
           ts: Math.floor(Date.now() / 1000),
         },
         consent: {
-          // TODO: remove offline_access from scopes if remember is not checked
+          rejectedScopes: req.body.remember ? ['offline_access'] : [],
         },
       })).catch(next);
   });
