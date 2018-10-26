@@ -128,7 +128,7 @@ oidc.initialize({
           ts: Math.floor(Date.now() / 1000),
         },
         consent: {
-          rejectedScopes: req.body.remember ? ['offline_access'] : [],
+          rejectedScopes: req.body.remember ? [] : ['offline_access'],
         },
       })).catch(next);
   });
