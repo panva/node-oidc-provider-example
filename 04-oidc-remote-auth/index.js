@@ -26,8 +26,6 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
     devInteractions: false,
   },
 });
-// http://localhost:3000/auth?client_id=foo&response_type=id_token&scope=openid&nonce=d
-
 
 // initialize with no keystores, dev ones will be provided
 oidc.initialize({
