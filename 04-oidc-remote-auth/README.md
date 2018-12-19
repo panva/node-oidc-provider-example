@@ -1,38 +1,73 @@
 # oidc-adapter
 
-Previous [02-oidc-adapter](../02-oidc-adapter/README.md)
+Previous [03-oidc-views-accounts](../03-oidc-views-accounts/README.md)
 
-As the application is starting up you've noticed the devInteractions warning. Let's create our own
-view structure using express. This is a good point to also hook in your own Account Model.
+Let's implement an integration with a remote authentication provider. 
 
-1) Copy the configured index, views and account model, feel free to check the diff after you do  
-```
-cp 03-oidc-views-accounts/*.js src
-cp -r 03-oidc-views-accounts/views src
-```
+1) Create a custom interactionUrl 
 
-2) Commit to your local repo  
-```
-git add .
-git commit -a -m 'added an account model and barebone views'
+```js
+  interactionUrl: function interactionUrl(ctx, interaction) { // eslint-disable-line no-unused-vars
+    return `/auth/login`;
+  },
 ```
 
-3) Deploy to heroku  
-```
-git push heroku master
+2) Create a custom /auth/login endpoint
+
+```js 
+  expressApp.get('/auth/login', async (req, res) => {
+    res.redirect('http://external.com/authentication');
+  });
 ```
 
-4) Done!  
-```
-# check your 'new' views, enter either of the configured emails to be logged in
-heroku open '/auth?client_id=foo&response_type=id_token+token&scope=openid+email&nonce=foobar&prompt=login'
-```
+3) Create a custom /auth/login/callback endpoint
 
-5) You may now proceed to plug in your real user/account model, expand the views with password resets,
-  registrations, social signup, as long as your routes are in the same namespace you have access
-  to the original authentication request parameters and interaction details, those are referenced by a
-  path specific cookie and stored using your backend adapter. oidc-provider
-  expects that you resolve all interactions in this one go, if you fail or purposefully omit one
-  the resumed authentication will fail with a corresponding error.
+Validate/parse the incoming callback data and finish interaction so that the user is redirected to the oauth redirect_uri.
 
-> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider#oidc-provider)
+```js 
+expressApp.get('/auth/login/callback', async (req, res) => {
+    const userId = req.query.userId;
+
+    const dateTime = Date.now();
+    const timestamp = Math.floor(dateTime / 1000);
+    const results = {
+      // authentication/login prompt got resolved, omit if no authentication happened, i.e. the user
+      // cancelled
+      login: {
+        account: userId, // logged-in account id
+        acr: 'acr string', // acr value for the authentication
+        remember: false, // true if provider should use a persistent cookie rather than a session one
+        ts: timestamp, // unix timestamp of the authentication
+      },
+
+      // consent was given by the user to the client for this session
+      consent: {
+        rejectedScopes: [], // array of strings, scope names the end-user has not granted
+        rejectedClaims: [], // array of strings, claim names the end-user has not granted
+      },
+
+      // meta is a free object you may store alongside an authorization. It can be useful
+      // during the interactionCheck to verify information on the ongoing session.
+      meta: {
+        // object structure up-to-you
+        customVariable: 'my custom var',
+      },
+
+      'custom prompt name resolved': {},
+    };
+    /*
+    results = {
+      // an error field used as error code indicating a failure during the interaction
+      error: 'custom_error',
+      // an optional description for this error
+      error_description: 'Custom Error description',
+    }
+    */
+
+    try {
+      return oidc.interactionFinished(req, res, results); // result object below
+    } catch (error) {
+      console.log(error);
+    }
+  });
+```
