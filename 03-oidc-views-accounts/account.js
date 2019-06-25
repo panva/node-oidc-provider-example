@@ -32,14 +32,18 @@ class Account {
   }
 
   static async authenticate(email, password) {
-    assert(password, 'password must be provided');
-    assert(email, 'email must be provided');
-    const lowercased = String(email).toLowerCase();
-    const id = _.findKey(USERS, { email: lowercased });
-    assert(id, 'invalid credentials provided');
+    try {
+      assert(password, 'password must be provided');
+      assert(email, 'email must be provided');
+      const lowercased = String(email).toLowerCase();
+      const id = _.findKey(USERS, { email: lowercased });
+      assert(id, 'invalid credentials provided');
 
-    // this is usually a db lookup, so let's just wrap the thing in a promise
-    return new this(id);
+      // this is usually a db lookup, so let's just wrap the thing in a promise
+      return new this(id);
+    } catch (err) {
+      return undefined;
+    }
   }
 }
 

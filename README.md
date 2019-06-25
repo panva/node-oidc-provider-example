@@ -5,7 +5,7 @@ instance on Heroku.
 
 Prerequisites
 
-- node 8.0.0 or newer
+- node 12.0.0 or newer
 - heroku cli installed (`which heroku`)
 - heroku cli authenticated (`heroku whoami`)
 - wget
@@ -27,4 +27,4 @@ oidc-provider on AWS Lambda.
 
 Adapters that have been seen include MongoDB, PostgreSQL, redis, DynamoDB, REST Api
 
-> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider#oidc-provider)
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider)
