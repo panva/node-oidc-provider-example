@@ -8,7 +8,7 @@ your tokens with each process restart, let's hook in an adapter. In this example
 1) Copy the configured index, feel free to check the diff after you do  
 ```bash
 cp 02-oidc-adapter/index.js src
-wget -O src/redis_adapter.js https://raw.githubusercontent.com/panva/node-oidc-provider/v6.0.0-alpha.3/example/adapters/redis.js
+wget -O src/redis_adapter.js https://raw.githubusercontent.com/panva/node-oidc-provider/master/example/adapters/redis.js
 ```
 
 2) Adding heroku-redis plugin takes a couple of minutes, make sure it's already created

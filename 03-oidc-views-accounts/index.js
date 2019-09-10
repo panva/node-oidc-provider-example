@@ -34,7 +34,7 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   // oidc-provider only looks up the accounts by their ID when it has to read the claims,
   // passing it our Account model method is sufficient, it should return a Promise that resolves
   // with an object with accountId property and a claims method.
-  findAccount: Account.findById,
+  findAccount: Account.findAccount,
 
   // let's tell oidc-provider you also support the email scope, which will contain email and
   // email_verified claims
@@ -50,14 +50,10 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uid}`;
   },
-  formats: {
-    AccessToken: 'jwt',
-  },
   features: {
     // disable the packaged interactions
     devInteractions: { enabled: false },
 
-    encryption: { enabled: true },
     introspection: { enabled: true },
     revocation: { enabled: true },
   },
@@ -116,9 +112,9 @@ expressApp.post('/interaction/:uid/login', setNoCache, parse, async (req, res, n
     const { uid, prompt, params } = await oidc.interactionDetails(req);
     const client = await oidc.Client.find(params.client_id);
 
-    const account = await Account.authenticate(req.body.email, req.body.password);
+    const accountId = await Account.authenticate(req.body.email, req.body.password);
 
-    if (!account) {
+    if (!accountId) {
       res.render('login', {
         client,
         uid,
@@ -135,7 +131,7 @@ expressApp.post('/interaction/:uid/login', setNoCache, parse, async (req, res, n
 
     const result = {
       login: {
-        account: account.accountId,
+        account: accountId,
       },
     };
 
