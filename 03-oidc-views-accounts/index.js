@@ -47,8 +47,10 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   // setting a nested route is just good practice so that users
   // don't run into weird issues with multiple interactions open
   // at a time.
-  interactionUrl(ctx) {
-    return `/interaction/${ctx.oidc.uid}`;
+  interactions: {
+    url(ctx) {
+      return `/interaction/${ctx.oidc.uid}`;
+    },
   },
   features: {
     // disable the packaged interactions
