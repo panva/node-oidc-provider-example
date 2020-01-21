@@ -80,7 +80,7 @@ function setNoCache(req, res, next) {
 
 expressApp.get('/interaction/:uid', setNoCache, async (req, res, next) => {
   try {
-    const details = await oidc.interactionDetails(req);
+    const details = await oidc.interactionDetails(req, res);
     console.log('see what else is available to you for interaction views', details);
     const { uid, prompt, params } = details;
 
@@ -111,7 +111,7 @@ expressApp.get('/interaction/:uid', setNoCache, async (req, res, next) => {
 
 expressApp.post('/interaction/:uid/login', setNoCache, parse, async (req, res, next) => {
   try {
-    const { uid, prompt, params } = await oidc.interactionDetails(req);
+    const { uid, prompt, params } = await oidc.interactionDetails(req, res);
     const client = await oidc.Client.find(params.client_id);
 
     const accountId = await Account.authenticate(req.body.email, req.body.password);
