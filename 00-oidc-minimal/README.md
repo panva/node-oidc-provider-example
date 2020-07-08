@@ -37,7 +37,7 @@ git push heroku master
 7) Done!  
 ```bash
 heroku open '/.well-known/openid-configuration' # to see your openid-configuration  
-heroku open '/auth?client_id=foo&response_type=code&scope=openid' # to start your first Authentication Request
+heroku open '/auth?client_id=foo&response_type=code&scope=openid&nonce=test' # to start your first Authentication Request
 ```
 
 You should see a login screen promting you to enter any login and password, after doing so your
