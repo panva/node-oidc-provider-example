@@ -27,6 +27,9 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
       token_endpoint_auth_method: 'none',
     },
   ],
+  cookies: {
+    keys: process.env.SECURE_KEY.split(','),
+  },
   jwks,
   formats: {
     AccessToken: 'jwt',
@@ -39,5 +42,4 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
 });
 
 oidc.proxy = true;
-oidc.keys = process.env.SECURE_KEY.split(',');
 oidc.listen(process.env.PORT);

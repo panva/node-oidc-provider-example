@@ -29,6 +29,9 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
       token_endpoint_auth_method: 'none',
     },
   ],
+  cookies: {
+    keys: process.env.SECURE_KEY.split(','),
+  },
   jwks,
 
   // oidc-provider only looks up the accounts by their ID when it has to read the claims,
@@ -62,7 +65,6 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
 });
 
 oidc.proxy = true;
-oidc.keys = process.env.SECURE_KEY.split(',');
 
 // let's work with express here, below is just the interaction definition
 const expressApp = express();

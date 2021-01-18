@@ -12,6 +12,9 @@ const jwks = require('./jwks.json');
 
 const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`, {
   clients: [{ client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb'] }],
+  cookies: {
+    keys: process.env.SECURE_KEY.split(','),
+  },
   jwks,
   // enable some of the feature, see the oidc-provider readme for more
   formats: {
@@ -25,5 +28,4 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
 });
 
 oidc.proxy = true;
-oidc.keys = process.env.SECURE_KEY.split(',');
 oidc.listen(process.env.PORT);

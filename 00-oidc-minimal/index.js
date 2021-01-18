@@ -14,13 +14,13 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
     client_secret: 'bar',
     redirect_uris: ['http://lvh.me/cb'],
   }],
+  cookies: {
+    keys: process.env.SECURE_KEY.split(','),
+  },
 });
 
 // Heroku has a proxy in front that terminates ssl, you should trust the proxy.
 oidc.proxy = true;
-
-// set the cookie signing keys (securekey plugin is taking care of those)
-oidc.keys = process.env.SECURE_KEY.split(',');
 
 // listen on the heroku generated port
 oidc.listen(process.env.PORT);
