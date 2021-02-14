@@ -8,7 +8,7 @@ your tokens with each process restart, let's hook in an adapter. In this example
 1) Copy the configured index, feel free to check the diff after you do  
 ```bash
 cp 02-oidc-adapter/index.js src
-wget -O src/redis_adapter.js https://raw.githubusercontent.com/panva/node-oidc-provider/master/example/adapters/redis.js
+wget -O src/redis_adapter.js https://raw.githubusercontent.com/panva/node-oidc-provider/main/example/adapters/redis.js
 ```
 
 2) Adding heroku-redis plugin takes a couple of minutes, make sure it's already created
@@ -25,7 +25,7 @@ git commit -a -m 'added a redis adapter for tokens and sessions'
 
 4) Deploy to heroku  
 ```bash
-git push heroku master
+git push heroku main
 ```
 
 5) Done!  

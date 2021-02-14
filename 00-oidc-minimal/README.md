@@ -31,7 +31,7 @@ git commit -a -m 'my initial commit'
 
 6) Deploy to heroku  
 ```bash
-git push heroku master
+git push heroku main
 ```
 
 7) Done!  
