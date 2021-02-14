@@ -19,7 +19,7 @@ git commit -a -m 'added an account model and barebone views'
 
 3) Deploy to heroku  
 ```bash
-git push heroku master
+git push heroku main
 ```
 
 4) Done!  
