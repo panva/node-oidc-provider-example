@@ -2,8 +2,8 @@
 
 Previous [01-oidc-configured](../01-oidc-configured/README.md)
 
-Storing tokens in-memory is not really production ready, it does not scale and it sucks to lose
-your tokens with each process restart, let's hook in an adapter. In this example a redis one.
+Storing data in-memory is not really production ready, it does not scale and it blows to lose
+your tokens and sessions with each process restart, let's add a storage adapter. In this example a redis one.
 
 1) Copy the configured index, feel free to check the diff after you do  
 ```bash
@@ -20,7 +20,7 @@ heroku config | grep REDIS_URL
 3) Commit to your local repo  
 ```bash
 git add .
-git commit -a -m 'added a redis adapter for tokens and sessions'
+git commit -a -m 'added a redis adapter for persisting data'
 ```
 
 4) Deploy to heroku  
@@ -30,15 +30,16 @@ git push heroku main
 
 5) Done!  
 ```bash
-# to get your access token > check the fragment for access_token
-heroku open '/auth?client_id=foo&response_type=id_token&scope=openid&nonce=foobar'
+heroku open '/auth?client_id=foo&response_type=id_token&redirect_uri=https%3A%2F%2Fjwt.io&scope=openid&nonce=foobar'
+# finish the login
+
 heroku restart
 
 # this time, since a real persistant adapter holds your session object you wont be asked for
 # login again
-heroku open '/auth?client_id=foo&response_type=id_token&scope=openid&nonce=foobar'
+heroku open '/auth?client_id=foo&response_type=id_token&redirect_uri=https%3A%2F%2Fjwt.io&scope=openid&nonce=foobar'
 ```
 
 Next up [03-oidc-views-accounts](../03-oidc-views-accounts/README.md)
 
-> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider)
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider repository](https://github.com/panva/node-oidc-provider).

@@ -37,7 +37,7 @@ git push heroku main
 7) Done!  
 ```bash
 heroku open '/.well-known/openid-configuration' # to see your openid-configuration  
-heroku open '/auth?client_id=foo&response_type=code&scope=openid' # to start your first Authentication Request
+heroku open '/auth?client_id=foo&response_type=id_token&redirect_uri=https%3A%2F%2Fjwt.io&scope=openid&nonce=foobar' # to start your first Authentication Request
 ```
 
 You should see a login screen promting you to enter any login and password, after doing so your
@@ -46,4 +46,4 @@ in the query.
 
 Next up [01-oidc-configured](../01-oidc-configured/README.md)
 
-> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider)
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider repository](https://github.com/panva/node-oidc-provider).

@@ -11,20 +11,19 @@ assert.equal(process.env.SECURE_KEY.split(',').length, 2, 'process.env.SECURE_KE
 const jwks = require('./jwks.json');
 
 const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`, {
-  clients: [{ client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb'] }],
+  clients: [
+    {
+      client_id: 'foo',
+      redirect_uris: ['https://jwt.io'], // using jwt.io as redirect_uri to show the ID Token contents
+      response_types: ['id_token'],
+      grant_types: ['implicit'],
+      token_endpoint_auth_method: 'none',
+    },
+  ],
   cookies: {
     keys: process.env.SECURE_KEY.split(','),
   },
   jwks,
-  // enable some of the feature, see the oidc-provider readme for more
-  formats: {
-    AccessToken: 'jwt',
-  },
-  features: {
-    encryption: { enabled: true },
-    introspection: { enabled: true },
-    revocation: { enabled: true },
-  },
 });
 
 oidc.proxy = true;

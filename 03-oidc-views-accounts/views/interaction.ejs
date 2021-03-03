@@ -127,44 +127,52 @@
       </div>
 
       <ul>
-      <% if ([details.scopes.accepted, details.scopes.rejected, details.claims.accepted, details.claims.rejected].every(({ length }) => length === 0)) { %>
-        <li>this is a new authorization</li>
-      <% } %>
+        <% if ([details.missingOIDCScope, details.missingOIDClaims, details.missingResourceScopes].filter(Boolean).length === 0) { %>
+          <li>the client is asking you to confirm previously given authorization</li>
+        <% } %>
 
-      <% if ([details.scopes.new, details.claims.new].every(({ length }) => length === 0)) { %>
-        <li>the client is asking you to confirm previously given authorization</li>
-      <% } %>
+        <% missingOIDCScope = new Set(details.missingOIDCScope); missingOIDCScope.delete('openid'); missingOIDCScope.delete('offline_access') %>
+        <% if (missingOIDCScope.size) { %>
+          <li>scopes:</li>
+          <ul>
+            <% missingOIDCScope.forEach((scope) => { %>
+              <li><%= scope %></li>
+            <% }) %>
+          </ul>
+        <% } %>
 
-      <% newScopes = new Set(details.scopes.new); newScopes.delete('openid'); newScopes.delete('offline_access') %>
-      <% if (newScopes.size) { %>
-        <li>scopes:</li>
-        <ul>
-          <% newScopes.forEach((scope) => { %>
-            <li><%= scope %></li>
-          <% }) %>
-        </ul>
-      <% } %>
+        <% missingOIDClaims = new Set(details.missingOIDClaims); ['sub', 'sid', 'auth_time', 'acr', 'amr', 'iss'].forEach(Set.prototype.delete.bind(missingOIDClaims)) %>
+        <% if (missingOIDClaims.size) { %>
+          <li>claims:</li>
+          <ul>
+            <% missingOIDClaims.forEach((claim) => { %>
+              <li><%= claim %></li>
+            <% }) %>
+          </ul>
+        <% } %>
 
-      <% newClaims = new Set(details.claims.new); ['sub', 'sid', 'auth_time', 'acr', 'amr', 'iss'].forEach(Set.prototype.delete.bind(newClaims)) %>
-      <% if (newClaims.size) { %>
-        <li>claims:</li>
-        <ul>
-          <% newClaims.forEach((claim) => { %>
-            <li><%= claim %></li>
-          <% }) %>
-        </ul>
-      <% } %>
-
-      <% if (params.scope && params.scope.includes('offline_access')) { %>
-        <li>
-        the client is asking to have offline access to this authorization
-          <% if (!details.scopes.new.includes('offline_access')) { %>
-            (which you've previously granted)
+        <% missingResourceScopes = details.missingResourceScopes %>
+        <% if (missingResourceScopes) { %>
+          <% for (const [indicator, scopes] of Object.entries(details.missingResourceScopes)) { %>
+            <li><%= indicator %>:</li>
+            <ul>
+              <% scopes.forEach((scope) => { %>
+                <li><%= scope %></li>
+              <% }) %>
+            </ul>
           <% } %>
-        </li>
-      <% } %>
+        <% } %>
 
-      </ul>
+        <% if (params.scope && params.scope.includes('offline_access')) { %>
+          <li>
+          the client is asking to have offline access to this authorization
+            <% if ((!details.missingOIDCScope) || !details.missingOIDCScope.includes('offline_access')) { %>
+              (which you've previously granted)
+            <% } %>
+          </li>
+        <% } %>
+
+        </ul>
 
       <form autocomplete="off" action="/interaction/<%= uid %>/confirm" method="post">
         <button autofocus type="submit" class="login login-submit">Continue</button>

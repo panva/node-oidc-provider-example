@@ -2,8 +2,7 @@
 
 Previous [00-oidc-minimal](../00-oidc-minimal/README.md)
 
-Extending the minimal configuration with a custom signing and encryption keystore, internal
-token integrity keys as well as enabling a set of optional features. Steps assume you've finished
+Extending the minimal configuration with custom signing keys. Steps assume you've finished
 the previous steps.
 
 1) Copy the configured index, feel free to check the diff after you do  
@@ -20,7 +19,7 @@ node 01-oidc-configured/generate-keys
 3) Commit to your local repo  
 ```bash
 git add .
-git commit -a -m 'added keystores, enabled features'
+git commit -a -m 'added signing keys'
 ```
 
 4) Deploy to heroku  
@@ -30,9 +29,9 @@ git push heroku main
 
 5) Done!  
 ```bash
-heroku open '/.well-known/openid-configuration' # to see your new openid-configuration, now much with much more content
+heroku open '/jwks' # to see your configured JWKS in effect
 ```
 
 Next up [02-oidc-adapter](../02-oidc-adapter/README.md)
 
-> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider documentation](https://github.com/panva/node-oidc-provider)
+> **HINT**: For more details consider documentation, configuration and details found in the [oidc-provider repository](https://github.com/panva/node-oidc-provider).

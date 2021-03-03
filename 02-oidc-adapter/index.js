@@ -18,10 +18,9 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   // configure Provider to use the adapter
   adapter: RedisAdapter,
   clients: [
-    // reconfigured the foo client for the purpose of showing the adapter working
     {
       client_id: 'foo',
-      redirect_uris: ['https://example.com'],
+      redirect_uris: ['https://jwt.io'], // using jwt.io as redirect_uri to show the ID Token contents
       response_types: ['id_token'],
       grant_types: ['implicit'],
       token_endpoint_auth_method: 'none',
@@ -31,14 +30,6 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
     keys: process.env.SECURE_KEY.split(','),
   },
   jwks,
-  formats: {
-    AccessToken: 'jwt',
-  },
-  features: {
-    encryption: { enabled: true },
-    introspection: { enabled: true },
-    revocation: { enabled: true },
-  },
 });
 
 oidc.proxy = true;

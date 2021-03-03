@@ -23,7 +23,7 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   clients: [
     {
       client_id: 'foo',
-      redirect_uris: ['https://example.com'],
+      redirect_uris: ['https://jwt.io'], // using jwt.io as redirect_uri to show the ID Token contents
       response_types: ['id_token'],
       grant_types: ['implicit'],
       token_endpoint_auth_method: 'none',
@@ -51,16 +51,13 @@ const oidc = new Provider(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
   // don't run into weird issues with multiple interactions open
   // at a time.
   interactions: {
-    url(ctx) {
-      return `/interaction/${ctx.oidc.uid}`;
+    url(ctx, interaction) {
+      return `/interaction/${interaction.uid}`;
     },
   },
   features: {
     // disable the packaged interactions
     devInteractions: { enabled: false },
-
-    introspection: { enabled: true },
-    revocation: { enabled: true },
   },
 });
 
@@ -84,7 +81,9 @@ expressApp.get('/interaction/:uid', setNoCache, async (req, res, next) => {
   try {
     const details = await oidc.interactionDetails(req, res);
     console.log('see what else is available to you for interaction views', details);
-    const { uid, prompt, params } = details;
+    const {
+      uid, prompt, params,
+    } = details;
 
     const client = await oidc.Client.find(params.client_id);
 
@@ -114,6 +113,7 @@ expressApp.get('/interaction/:uid', setNoCache, async (req, res, next) => {
 expressApp.post('/interaction/:uid/login', setNoCache, parse, async (req, res, next) => {
   try {
     const { uid, prompt, params } = await oidc.interactionDetails(req, res);
+    assert.strictEqual(prompt.name, 'login');
     const client = await oidc.Client.find(params.client_id);
 
     const accountId = await Account.authenticate(req.body.email, req.body.password);
@@ -134,9 +134,7 @@ expressApp.post('/interaction/:uid/login', setNoCache, parse, async (req, res, n
     }
 
     const result = {
-      login: {
-        account: accountId,
-      },
+      login: { accountId },
     };
 
     await oidc.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
@@ -147,12 +145,49 @@ expressApp.post('/interaction/:uid/login', setNoCache, parse, async (req, res, n
 
 expressApp.post('/interaction/:uid/confirm', setNoCache, parse, async (req, res, next) => {
   try {
-    const result = {
-      consent: {
-        // rejectedScopes: [], // < uncomment and add rejections here
-        // rejectedClaims: [], // < uncomment and add rejections here
-      },
-    };
+    const interactionDetails = await oidc.interactionDetails(req, res);
+    const { prompt: { name, details }, params, session: { accountId } } = interactionDetails;
+    assert.strictEqual(name, 'consent');
+
+    let { grantId } = interactionDetails;
+    let grant;
+
+    if (grantId) {
+      // we'll be modifying existing grant in existing session
+      grant = await oidc.find(grantId);
+    } else {
+      // we're establishing a new grant
+      grant = new oidc.Grant({
+        accountId,
+        clientId: params.client_id,
+      });
+    }
+
+    if (details.missingOIDCScope) {
+      grant.addOIDCScope(details.missingOIDCScope.join(' '));
+      // use grant.rejectOIDCScope to reject a subset or the whole thing
+    }
+    if (details.missingOIDClaims) {
+      grant.addOIDCClaims(details.missingOIDClaims);
+      // use grant.rejectOIDCClaims to reject a subset or the whole thing
+    }
+    if (details.missingResourceScopes) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [indicator, scopes] of Object.entries(details.missingResourceScopes)) {
+        grant.addResourceScope(indicator, scopes.join(' '));
+        // use grant.rejectResourceScope to reject a subset or the whole thing
+      }
+    }
+
+    grantId = await grant.save();
+
+    const consent = {};
+    if (!interactionDetails.grantId) {
+      // we don't have to pass grantId to consent, we're just modifying existing one
+      consent.grantId = grantId;
+    }
+
+    const result = { consent };
     await oidc.interactionFinished(req, res, result, { mergeWithLastSubmission: true });
   } catch (err) {
     next(err);
@@ -172,7 +207,7 @@ expressApp.get('/interaction/:uid/abort', setNoCache, async (req, res, next) => 
 });
 
 // leave the rest of the requests to be handled by oidc-provider, there's a catch all 404 there
-expressApp.use(oidc.callback);
+expressApp.use(oidc.callback());
 
 // express listen
 expressApp.listen(process.env.PORT);
