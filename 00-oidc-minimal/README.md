@@ -40,9 +40,8 @@ heroku open '/.well-known/openid-configuration' # to see your openid-configurati
 heroku open '/auth?client_id=foo&response_type=id_token&redirect_uri=https%3A%2F%2Fjwt.io&scope=openid&nonce=foobar' # to start your first Authentication Request
 ```
 
-You should see a login screen promting you to enter any login and password, after doing so your
-Request will be resolved and you will be redirected to lvh.me (your localhost) with an authorization_code
-in the query.
+You should see a login screen promting you to enter any login and password, afterwards a consent screen that you confirm. Your
+Request will be resolved and you will be redirected to jwt.io with an ID Token in the URL fragment.
 
 Next up [01-oidc-configured](../01-oidc-configured/README.md)
 
