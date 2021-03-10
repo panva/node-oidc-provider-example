@@ -167,8 +167,8 @@ expressApp.post('/interaction/:uid/confirm', setNoCache, parse, async (req, res,
       grant.addOIDCScope(details.missingOIDCScope.join(' '));
       // use grant.rejectOIDCScope to reject a subset or the whole thing
     }
-    if (details.missingOIDClaims) {
-      grant.addOIDCClaims(details.missingOIDClaims);
+    if (details.missingOIDCClaims) {
+      grant.addOIDCClaims(details.missingOIDCClaims);
       // use grant.rejectOIDCClaims to reject a subset or the whole thing
     }
     if (details.missingResourceScopes) {
