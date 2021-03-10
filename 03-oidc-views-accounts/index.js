@@ -154,7 +154,7 @@ expressApp.post('/interaction/:uid/confirm', setNoCache, parse, async (req, res,
 
     if (grantId) {
       // we'll be modifying existing grant in existing session
-      grant = await oidc.find(grantId);
+      grant = await oidc.Grant.find(grantId);
     } else {
       // we're establishing a new grant
       grant = new oidc.Grant({
