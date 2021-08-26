@@ -1,4 +1,4 @@
-# oidc-adapter
+# oidc-views-accounts
 
 Previous [02-oidc-adapter](../02-oidc-adapter/README.md)
 
